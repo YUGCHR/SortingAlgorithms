@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 
-namespace HeapSiftSortWhile
+namespace HeapSiftSortBottomUp
 {
-    class Program2
+    class Program4
     {
         static void Main(string[] args)
         {
@@ -12,7 +12,7 @@ namespace HeapSiftSortWhile
 
             //SiftingIsCarriedOut(input);
             SiftingIsCarriedOut.BasePrintArray(input);
-            SiftingIsCarriedOut.HeapSort(input);
+            SiftingIsCarriedOut.HeapSortBottomUp(input);
             //SiftingIsCarriedOut.BasePrintArray(input);
         }
     }
@@ -21,7 +21,7 @@ namespace HeapSiftSortWhile
     public static class SiftingIsCarriedOut
     {
 
-        public static void HeapSort(int[] input)
+        public static void HeapSortBottomUp(int[] input)
         {
             int inputLength = input.Length;
             int count = 0;
@@ -35,9 +35,9 @@ namespace HeapSiftSortWhile
             {
                 countTemp = count;
                 Console.WriteLine($"\nIterate over the element[{start}] = {input[start]}, count = {count}");
-                count = HeapSift(input, start, inputLength - 1, count);
+                count = HeapSortBottomUp_Sift(input, start, inputLength - 1, count);
                 Console.WriteLine($"\nAfter HeapSift the element[{start}] = {input[start]}, count = {count}");
-                if(count == countTemp)
+                if (count == countTemp)
                 {
                     count++;
                 }
@@ -57,58 +57,96 @@ namespace HeapSiftSortWhile
 
                 // После обмена в корне сортирующего дерева немаксимальный элемент, восстанавливаем сортирующее дерево
                 // Просейка для неотсортированной части массива
-                count = HeapSift(input, 0, end - 1, count);
+                count = HeapSortBottomUp_Sift(input, 0, end - 1, count);
             }
 
             Console.WriteLine($"\n Sorting was finished, iterations count = {count}, input array length = {inputLength}, length * log(length) = {inputLength * MathF.Log(inputLength)}\n");
 
         }
 
-        // Просейка сверху вниз, в результате которой восстанавливается сортирующее дерево
-        static int HeapSift(int[] input, int start, int end, int count)
+        // Просейка, сначала идущая вниз, затем выныривающая наверх
+        // Восходящая просейка
+        static int HeapSortBottomUp_Sift(int[] input, int start, int end, int count)
         {
-            // Начало подмассива - узел, с которого начинаем просейку вниз
-            int root = start;
+            int current;
+            // По бОльшим потомкам спускаемся до самого нижнего уровня
+            (current, count) = HeapSortBottomUp_LeafSearch(input, start, end, count);
 
-            // Цикл просейки продолжается до тех пор, пока встречаются потомки, большие чем их родитель
+            // Поднимаемся вверх, пока не встретим узел больший или равный корню поддерева
+            while (input[start] > input[current])
+            {
+                current = (current - 1) / 2;
+
+                PrintArrayWithRoot(input, current);
+                count++;
+            }
+
+            // Найденный узел запоминаем и в этот узел кладём корень поддерева
+
+            int temp = input[current];
+            input[current] = input[start];
+
+            // всё что выше по ветке вплоть до корня - сдвигаем на один уровень вверх
+            while (current > start)
+            {
+                current = (current - 1) / 2;
+
+                (temp, input[current]) = (input[current], temp);
+
+                PrintArrayWithRoot(input, current);
+                count++;
+            }
+
+            return count;
+        }
+
+        // Спуск вниз до самого нижнего листа - выбираем бОльших потомков
+        static (int, int) HeapSortBottomUp_LeafSearch(int[] input, int start, int end, int count)
+        {
+            int child;
+            int current = start;
+
+            // Спускаемся вниз, определяя какой потомок (левый или правый) больше
             while (true)
             {
                 // Левый потомок
-                int child = 2 * root + 1;
+                child = 2 * current + 1;
 
-                // (Если левый потомок корня — допустимый индекс, а элемент больше, чем текущий наибольший, обновляем наибольший элемент)
-                // Левый потомок за пределами подмассива - завершаем просейку
-                //bool isLargest = left_child < heap_size && input[left_child] < input[largest];
-                if (child > end)
+                // Прерываем цикл, если правый вне массива                
+                if (child + 1 > end)
                 {
+                    count++;
                     break;
                 }
 
-                // Если правый потомок тоже в пределах подмассива, то среди обоих потомков выбираем наибольший
-                bool isLargest = child + 1 <= end && input[child] < input[child + 1];
-                if (isLargest)
+                // Идём туда, где потомок больше
+                bool isLarger = input[child + 1] > input[child];
+                if (isLarger)
                 {
-                    child += 1;
-                }
-
-                // (Если наибольший элемент больше не корневой, они меняются местами)
-                // Если больший потомок больше корня, то меняем местами, при этом больший потомок сам становится корнем, от которого дальше опускаемся вниз по дереву
-                bool largestNotRoot = input[root] < input[child];
-                if (largestNotRoot)
-                {
-                    (input[root], input[child]) = (input[child], input[root]);
-                    root = child;
-                    //count = HeapSift(input, heap_size, largest, count);
-
+                    count++;
+                    current = child + 1;
                 }
                 else
                 {
-                    break;
+                    count++;
+                    current = child;
                 }
-                PrintArrayWithRoot(input, root);
+
+                PrintArrayWithRoot(input, current);
+            }
+
+            // Возможна ситуация, если левый потомок единственный
+            // Левый потомок
+            child = 2 * current + 1;
+
+            if (child <= end)
+            {
+                current = child;
+                PrintArrayWithRoot(input, current);
                 count++;
             }
-            return count;
+
+            return (current, count);
         }
 
         public static void PrintArrayWithRoot(int[] input, int root)

@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeapSiftSort", "HeapSiftSor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeapSiftSortWhile", "HeapSiftSortWhile\HeapSiftSortWhile.csproj", "{D6347196-1791-4AFF-B2B8-BAF65063B804}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeapSiftSortBottomUp", "HeapSiftSortBottomUp\HeapSiftSortBottomUp.csproj", "{65ABD8E9-3D6E-4C10-A308-83A8E3E1E28D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{D6347196-1791-4AFF-B2B8-BAF65063B804}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6347196-1791-4AFF-B2B8-BAF65063B804}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6347196-1791-4AFF-B2B8-BAF65063B804}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65ABD8E9-3D6E-4C10-A308-83A8E3E1E28D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65ABD8E9-3D6E-4C10-A308-83A8E3E1E28D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65ABD8E9-3D6E-4C10-A308-83A8E3E1E28D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65ABD8E9-3D6E-4C10-A308-83A8E3E1E28D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
