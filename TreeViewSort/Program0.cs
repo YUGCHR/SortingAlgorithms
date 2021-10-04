@@ -3,16 +3,16 @@ using System.Linq;
 
 namespace TreeViewSort
 {
-    class Program
+    class Program0
     {
         static void Main(string[] args)
         {
-            int[] input = new int[15] { 1, 15, 14, 13, 11, 10, 12, 5, 9, 2, 6, 3, 8, 7, 4 };
+            int[] input = new int[60] { 1, 15, 14, 13, 11, 10, 12, 5, 9, 2, 6, 3, 8, 7, 4, 21, 35, 34, 33, 31, 30, 32, 25, 29, 22, 26, 23, 28, 27, 24, 41, 55, 54, 53, 51, 50, 52, 45, 49, 42, 46, 43, 48, 47, 44, 61, 75, 74, 73, 71, 70, 72, 65, 69, 62, 66, 63, 68, 67, 64 };
 
             //SiftingIsCarriedOut(input);
             HeapSort.BasePrintArray(input);
             HeapSort.Sorting(input);
-            HeapSort.BasePrintArray(input);
+            //HeapSort.BasePrintArray(input);
         }
     }
 
@@ -23,13 +23,13 @@ namespace TreeViewSort
         public static void Sorting(int[] input)
         {
             int inputLength = input.Length;
-
+            int count = 0;
             Console.WriteLine($"\n ------------------------ Part 1 - Building the heap (rearranging the array) ------------------------");
 
             // Построение кучи (перегруппируем массив)
             for (int i = (inputLength / 2 - 1); i >= 0; i--)
             {
-                Heapify(input, inputLength, i);
+                count = Heapify(input, inputLength, i, count);
             }
 
             Console.WriteLine($"\n ++++++++++++++++++++++++ Part 2 - Fetch elements from the heap one by one ++++++++++++++++++++++++");
@@ -43,14 +43,17 @@ namespace TreeViewSort
                 (input[0], input[i]) = (input[i], input[0]);
                 Console.WriteLine($"Start = {input[0]}, End = {input[i]}\n");
 
-                Heapify(input, i, 0);
+                count = Heapify(input, i, 0, count);
             }
+
+            Console.WriteLine($"\n Sorting was finished, iterations count = {count}, input array length = {inputLength}, length * log(ltngth) = {inputLength*MathF.Log(inputLength)}");
+
         }
 
         // Метод для преобразования в двоичную кучу поддерева с корневым узлом i, что является индексом в input[] (inputLength - размер кучи)
-        static void Heapify(int[] input, int inputLength, int i)
+        static int Heapify(int[] input, int inputLength, int i, int count)
         {
-
+            count++;
             int largest = i;
             int left = 2 * i + 1;
             int right = 2 * i + 2;
@@ -80,8 +83,9 @@ namespace TreeViewSort
 
                 HeapSort.PrintArrayWithRoot(input, largest);
                 // Рекурсивно преобразуем в двоичную кучу затронутое поддерево
-                Heapify(input, inputLength, largest);
+                count = Heapify(input, inputLength, largest, count);
             }
+            return count;
         }
 
         public static void PrintArrayWithRoot(int[] input, int root)
