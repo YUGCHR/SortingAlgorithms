@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace HeapSortingAlgorithms
+namespace Extensions.Library
 {
     public static class AuxiliaryTools
     {
-
         public static void PrintArrayWithRoot(int[] input, int root)
         {
             BasePrintArray(input, $" root = {root}");
@@ -37,6 +33,5 @@ namespace HeapSortingAlgorithms
         {
             return whoIs < border;
         }
-
     }
 }
