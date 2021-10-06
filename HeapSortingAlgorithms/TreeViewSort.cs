@@ -1,22 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using HeapSortingAlgorithms;
 
-namespace TreeViewSort
+namespace HeapSortingAlgorithms
 {
-    class Program0
-    {
-        static void Main(string[] args)
-        {
-            int[] input = new int[60] { 1, 15, 14, 13, 11, 10, 12, 5, 9, 2, 6, 3, 8, 7, 4, 21, 35, 34, 33, 31, 30, 32, 25, 29, 22, 26, 23, 28, 27, 24, 41, 55, 54, 53, 51, 50, 52, 45, 49, 42, 46, 43, 48, 47, 44, 61, 75, 74, 73, 71, 70, 72, 65, 69, 62, 66, 63, 68, 67, 64 };
-
-            //SiftingIsCarriedOut(input);
-            HeapSort.BasePrintArray(input);
-            HeapSort.Sorting(input);
-            //HeapSort.BasePrintArray(input);
-        }
-    }
-
-
     public static class HeapSort
     {
 
@@ -46,7 +36,7 @@ namespace TreeViewSort
                 count = Heapify(input, i, 0, count);
             }
 
-            Console.WriteLine($"\n Sorting was finished, iterations count = {count}, input array length = {inputLength}, length * log(ltngth) = {inputLength*MathF.Log(inputLength)}");
+            Console.WriteLine($"\n Sorting was finished, iterations count = {count}, input array length = {inputLength}, length * log(ltngth) = {inputLength * MathF.Log(inputLength)}");
 
         }
 
@@ -59,14 +49,14 @@ namespace TreeViewSort
             int right = 2 * i + 2;
 
             Console.WriteLine($"input largest[{largest}] = {input[largest]}");
-            HeapSort.PrintArrayWithRoot(input, largest);
+            AuxiliaryTools.PrintArrayWithRoot(input, largest);
 
             bool leftMoreRoot = left.IsOutOfIndexIn(inputLength) && input[left] > input[largest]; // left < inputLength 
             if (leftMoreRoot)
             {
                 largest = left;
                 Console.WriteLine($"input left[{left}] = {input[left]}");
-                HeapSort.PrintArrayWithRoot(input, largest);
+                AuxiliaryTools.PrintArrayWithRoot(input, largest);
             }
 
             bool rightMoreLargest = right.IsOutOfIndexIn(inputLength) && input[right] > input[largest];
@@ -74,48 +64,18 @@ namespace TreeViewSort
             {
                 largest = right;
                 Console.WriteLine($"input right[{right}] = {input[right]}");
-                HeapSort.PrintArrayWithRoot(input, largest);
+                AuxiliaryTools.PrintArrayWithRoot(input, largest);
             }
 
             if (largest != i)
             {
                 (input[i], input[largest]) = (input[largest], input[i]);
 
-                HeapSort.PrintArrayWithRoot(input, largest);
+                AuxiliaryTools.PrintArrayWithRoot(input, largest);
                 // Рекурсивно преобразуем в двоичную кучу затронутое поддерево
                 count = Heapify(input, inputLength, largest, count);
             }
             return count;
         }
-
-        public static void PrintArrayWithRoot(int[] input, int root)
-        {
-            BasePrintArray(input, $" root = {root}");
-        }
-
-        public static void BasePrintArray(int[] input, string additions = "")
-        {
-            int inputLength = input.Length;
-
-            string currentIsCurrent = String.Equals(additions, "") ? "" : $" / {additions}";
-
-            string lengthName = String.Equals(additions, "") ? $"Length = {inputLength}, Array = " : "";
-            string indexesName = String.Equals(additions, "") ? $"   Array indexes are " : "";
-
-            Console.WriteLine($"{indexesName}[{Enumerable.Range(0, inputLength).ToArray().AddBlankIfOneDigitInNumberToString()}]");
-            Console.Write($"{lengthName}[{input.AddBlankIfOneDigitInNumberToString()}]{currentIsCurrent}\n");
-            //Console.Read();
-        }
-
-        static string AddBlankIfOneDigitInNumberToString(this int[] input, string separ = " ")
-        {
-            return String.Join(separ, input.Select(x => { return x < 10 ? $" {x}" : $"{x}"; }).ToArray());
-        }
-
-        static bool IsOutOfIndexIn(this int whoIs, int border)
-        {
-            return whoIs < border;
-        }
-
     }
 }
